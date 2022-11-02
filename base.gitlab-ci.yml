@@ -34,14 +34,14 @@ variables:
   variables:
     PLAYBOOK: lint.yml
 
-.run_playbook:
-  extends: .base
-  stage: run
-  resource_group: run
-  artifacts:
-    name: "Playbook artifacts"
-    paths:
-    - artifacts/
-    expire_in: 10 minute 
-  variables:
-    PLAYBOOK: run.yml
+# .run_playbook:
+#   extends: .base
+#   stage: run
+#   resource_group: run
+#   artifacts:
+#     name: "Playbook artifacts"
+#     paths:
+#     - artifacts/
+#     expire_in: 10 minute 
+#   variables:
+#     PLAYBOOK: run.yml
