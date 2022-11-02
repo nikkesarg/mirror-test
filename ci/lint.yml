@@ -1,0 +1,30 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+
+  - name: Initialize
+    include_tasks: tasks/initialize.yml
+
+  - name: Run ansible-lint
+    command:
+      cmd: ansible-lint --exclude=ci --force-color
+      chdir: "{{ lookup('env', 'CI_PROJECT_DIR') }}"
+    register: result
+    ignore_errors: true
+
+  # - name: Send fail var to telegram task
+  #   include_tasks: send_telegram.yml
+  #   vars:
+  #     event_name: 'finished'
+  #     error_code: "{{ result.stdout[:3000] }}"
+  #   when: "'Success!' in result.stdout"
+
+  # - name: Send finish var to telegram task
+  #   include_tasks: send_telegram.yml
+  #   vars:
+  #     event_name: 'failed'
+  #     error_code: "{{ result.stdout[:3000] }}"
+  #   when: "not 'Success!' in result.stdout"
+  

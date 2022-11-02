@@ -1,0 +1,57 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+
+  - name: Initialize
+    include_tasks: tasks/initialize.yml
+
+  - name: Install roles
+    command:
+      cmd: ansible-galaxy role install -r requirements.yml -vvvv --force     
+      chdir: "{{ lookup('env', 'CI_PROJECT_DIR') }}"
+
+  - name: Install collections
+    command:
+      cmd: ansible-galaxy collection install -r requirements.yml -vvvv
+      chdir: "{{ lookup('env', 'CI_PROJECT_DIR') }}"
+
+  - name: Check that the "ssh" dir exists
+    stat:
+      path: "{{ lookup('env', 'CI_PROJECT_DIR') }}/ssh"
+    register: stat_result
+
+  - name: Fix ssh permissions
+    file: 
+      dest: "{{ lookup('env', 'CI_PROJECT_DIR') }}/ssh"
+      mode: 0600
+      recurse: yes
+    when: stat_result.stat.exists
+
+  - name: Check that the "ansible.cfg" exists
+    stat:
+      path: "{{ lookup('env', 'CI_PROJECT_DIR') }}/ansible.cfg"
+    register: stat_result
+
+  - when: stat_result.stat.exists
+    block: 
+
+    - name: Ensure /etc/ansible dir created
+      file: 
+        path: /etc/ansible
+        state: directory
+
+    - name: Copy ansible.cfg
+      copy: 
+        src: "{{ lookup('env', 'CI_PROJECT_DIR') }}/ansible.cfg"
+        dest: /etc/ansible/ansible.cfg
+
+  # Do not use module to enable color output
+  - name: Run ansible-playbook
+    command:
+      cmd: ansible-playbook main.yml -i hosts.yml -v
+      chdir: "{{ lookup('env', 'CI_PROJECT_DIR') }}"
+    environment: 
+      ANSIBLE_STDOUT_CALLBACK: debug
+      ANSIBLE_HOST_KEY_CHECKING: False

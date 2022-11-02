@@ -1,0 +1,29 @@
+---
+- name: Extract GPG assets from env variables
+  copy:
+    dest: "{{ item.dest }}"
+    content: |-
+      {{ lookup('env', item.env) }}
+  loop:
+  - dest: /tmp/public.key
+    env: GPG_PUBLIC_KEY
+  - dest: /tmp/private.key
+    env: GPG_PRIVATE_KEY
+  no_log: true
+
+- name: Import gpg keys
+  include_role:
+    name: gpg-import
+  vars:
+    gpg_import:
+      key_uid: "{{ lookup('env', 'GPG_UID') }}"
+      public_key_path: /tmp/public.key
+      private_key_path: /tmp/private.key
+
+- name: Unencrypt repository
+  shell: 
+    cmd: git-crypt unlock
+    chdir: "{{ lookup('env', 'CI_PROJECT_DIR') }}"
+
+- name: Load Helm and Kubectl for this cluster version
+  command: /root/load-kube-version.sh "{{ lookup('env', 'K8S_VERSION') }}"

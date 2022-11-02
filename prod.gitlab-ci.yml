@@ -1,0 +1,13 @@
+# Include overrides jobs with the same name!
+include:
+- local: '/base.gitlab-ci.yml'
+
+Lint:
+  extends: .lint
+  tags:
+  - $CI_PROD_RUNNER_TAG
+
+Run playbook:
+  extends: .run_playbook
+  tags:
+  - $CI_PROD_RUNNER_TAG
