@@ -25,7 +25,7 @@ variables:
   - cd ${root_dir}/ci
   - ANSIBLE_STDOUT_CALLBACK=debug ansible-playbook ${PLAYBOOK} ${ANSIBLE_COMMON_PARAMETERS}
   only:
-  - "/^master$/"
+  - "/^main$/"
 
 .lint:
   extends: .base
