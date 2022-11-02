@@ -4,8 +4,8 @@
 
   tasks:
 
-  - name: Initialize
-    include_tasks: tasks/initialize.yml
+  # - name: Initialize
+  #   include_tasks: tasks/initialize.yml
 
   - name: Run ansible-lint
     command:
