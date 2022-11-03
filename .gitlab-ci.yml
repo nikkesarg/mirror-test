@@ -1,0 +1,29 @@
+stages:
+- prepare
+
+variables:
+  ANSIBLE_COMMON_PARAMETERS: -v
+  CI_FRAMEWORK_ARCHIVE: https://gitlab.avant-it.ru/api/v4/projects/662/repository/archive.tar.gz?sha=main
+
+.base:
+  image: docker-repository.avant-it.ru/ci-job:3.7.2
+  interruptible: false
+  script:
+  - root_dir=$(pwd)
+
+  - 'curl --header "Private-Token: ${GITLAB_API_TOKEN}" ${CI_FRAMEWORK_ARCHIVE} -o /tmp/ci.tgz -v'
+  - tar -xf /tmp/ci.tgz -C /tmp
+  - mv /tmp/*/ci $root_dir
+  - rm -rf /tmp/*
+
+  - cd ${root_dir}/ci
+  - ANSIBLE_STDOUT_CALLBACK=debug ansible-playbook ${PLAYBOOK} ${ANSIBLE_COMMON_PARAMETERS}
+  tags:
+  - $CI_RUNNER_TAG
+
+Lint:
+  extends: .base
+  interruptible: true
+  stage: prepare
+  variables:
+    PLAYBOOK: lint.yml
