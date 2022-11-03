@@ -16,7 +16,7 @@
     vars:
       event_name: 'finished'
       error_code: "{{ result.stdout[:3000] }}"
-    when: "'Success!' in result.stdout"
+    when: "'[0-9] failure(s)' in result.stderr"
 
   - name: Send finish var to telegram task
     include_tasks: send_telegram.yml

@@ -1,0 +1,7 @@
+<b>Event name:</b> {{ event_name }}
+<b>Repository:</b> <a href="{{ lookup('env', 'CI_PROJECT_URL') }}">{{ lookup('env', 'CI_PROJECT_TITLE') }}</a>  
+<b>GitRef (tag or branch):</b> <a href="{{ lookup('env', 'CI_PROJECT_URL') }}/-/tree/{{ lookup('env', 'CI_COMMIT_REF_NAME') }}">{{ lookup('env', 'CI_COMMIT_REF_NAME') }}</a>
+<b>Commit:</b> <a href="{{ lookup('env', 'CI_PROJECT_URL') }}/-/commit/{{ lookup('env', 'CI_COMMIT_SHA') }}">{{ lookup('env', 'CI_COMMIT_MESSAGE') }}</a>
+<b>PipelineId:</b> <a href="{{ lookup('env', 'CI_PIPELINE_URL') }}">{{ lookup('env', 'CI_PIPELINE_ID') }}</a>  
+<b>JobName/Id:</b> <a href="{{ lookup('env', 'CI_JOB_URL') }}">{{ lookup('env', 'CI_JOB_NAME') }} ({{ lookup('env', 'CI_JOB_ID') }})</a>
+<b>Error/Id:</b> {{ error_code }}
