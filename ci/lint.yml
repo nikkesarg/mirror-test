@@ -30,4 +30,4 @@
         include_tasks: send_telegram.yml
         vars:
           event_name: 'Failed occured while executing Pipeline'
-          error_code: "{{ result.stderr }}"
+          error_code: "Error occured in pipeline"
