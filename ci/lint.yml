@@ -5,10 +5,9 @@
   tasks:
   - name: Handle the error
     block:
-
       - name: Run ansible-lint
         command:
-          cmd: ansible-lint --exclude=ci --force-color
+          cmd: ansible-lint7 --exclude=ci --force-color
           chdir: "{{ lookup('env', 'CI_PROJECT_DIR') }}"
         register: result
         ignore_errors: true
