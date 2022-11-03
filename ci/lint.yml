@@ -3,24 +3,32 @@
   gather_facts: no
 
   tasks:
+  - name: Handle the error
+    block:
 
-  - name: Run ansible-lint
-    command:
-      cmd: ansible-lint --exclude=ci --force-color
-      chdir: "{{ lookup('env', 'CI_PROJECT_DIR') }}"
-    register: result
-    ignore_errors: true
+      - name: Run ansible-lint
+        command:
+          cmd: ansible-lint --exclude=ci --force-color
+          chdir: "{{ lookup('env', 'CI_PROJECT_DIR') }}"
+        register: result
+        ignore_errors: true
 
-  - name: Send fail var to telegram task
-    include_tasks: send_telegram.yml
-    vars:
-      event_name: 'finished'
-      error_code: "{{ result.stdout[:3000] }}"
-    when: "'[0-9] failure(s)' in result.stderr"
+      - name: Send fail var to telegram task
+        include_tasks: send_telegram.yml
+        vars:
+          event_name: 'finished'
+          error_code: "{{ result.stdout[:3000] }}"
+        when: "'0 failure(s)' in result.stderr"
 
-  - name: Send finish var to telegram task
-    include_tasks: send_telegram.yml
-    vars:
-      event_name: 'failed'
-      error_code: "{{ result.stdout[:3000] }}"
-    when: "not 'Success!' in result.stdout"
+      - name: Send finish var to telegram task
+        include_tasks: send_telegram.yml
+        vars:
+          event_name: 'failed'
+          error_code: "{{ result.stdout[:3000] }}"
+        when: "not '0 failure(s)' in result.stderr"
+    rescue: 
+      - name: Send message that error occured while execute CI
+        include_tasks: send_telegram.yml
+        vars:
+          event_name: 'Failed occured while executing Pipeline'
+          erroe_code: "{{result.stderr}}"
