@@ -2,7 +2,7 @@
  
   - name: Send notify to ls Telegram
     community.general.telegram:
-      token: '5778451673:AAF0ixDZ8O8zIBF0C0i1C3TLzFlpW0A4g_g'
+      token: "{{ lookup('ansible.builtin.env', 'TELEGRAM_TOKEN') }}"
       api_method: sendMessage
       api_args:
         chat_id: 5170286841
