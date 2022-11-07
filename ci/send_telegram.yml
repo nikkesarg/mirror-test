@@ -14,7 +14,7 @@
       token: "{{ lookup('ansible.builtin.env', 'TELEGRAM_TOKEN') }}"
       api_method: sendMessage
       api_args:
-        chat_id: "{{ lookup('ansible.builtin.env','USERS')}}"
+        chat_id: grep "{{ lookup('ansible.builtin.env','GITLAB_USER_ID') }}:" {{lookup('ansible.builtin.env','USERS')}} | awk '{print $2}'
         parse_mode: html
         text: "{{ lookup('template', 'templates/main_telegram_message_template.yml.j2') }}"
         disable_web_page_preview: true
