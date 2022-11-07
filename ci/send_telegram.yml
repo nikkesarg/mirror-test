@@ -5,7 +5,7 @@
       token: "{{ lookup('ansible.builtin.env', 'TELEGRAM_TOKEN') }}"
       api_method: sendMessage
       api_args:
-        chat_id: "{{lookup('ansible.builtin.file','telegram'| from_yaml)[lookup('ansible.builtin.env','GITLAB_USER_ID')].tg_id}}"
+        chat_id: "{{lookup('ansible.builtin.file','files/telegram' | from_yaml)[lookup('ansible.builtin.env','GITLAB_USER_ID')].tg_id}}"
         parse_mode: html
         text: "{{ lookup('template', 'templates/main_telegram_message_template.yml.j2') }}"
         disable_web_page_preview: true
