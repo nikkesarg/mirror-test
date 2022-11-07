@@ -18,29 +18,22 @@
       - name: cat result
         shell: cat /tmp/result.txt
 
-      - name: Delete trash from output
-        shell: sed -i '' -e "s/[[0-9]*m//g"  /tmp/result.txt
-        register: parsed
+      - name: Send fail var to telegram task
+        include_tasks: send_telegram.yml
+        vars:
+          event_name: 'finished'
+          error_code: "{{ lookup('ansible.builtin.file','/tmp/result.txt') }}"
+        when: "'0 failure(s)' in result.stderr"
 
-      - name: Print result
-        shell: echo "{{ parsed.stdout }}"
-
-    #   - name: Send fail var to telegram task
-    #     include_tasks: send_telegram.yml
-    #     vars:
-    #       event_name: 'finished'
-    #       error_code: "{{ result.stdout[:3000] }}"
-    #     when: "'0 failure(s)' in result.stderr"
-
-    #   - name: Send finish var to telegram task
-    #     include_tasks: send_telegram.yml
-    #     vars:
-    #       event_name: 'failed'
-    #       error_code: "{{ result.stdout[:3000] }}"
-    #     when: "not '0 failure(s)' in result.stderr"
-    # rescue: 
-    #   - name: Send message that error occured while execute CI
-    #     include_tasks: send_telegram.yml
-    #     vars:
-    #       event_name: 'Failed occured while executing Pipeline'
-    #       error_code: "Error occured in pipeline"
+      - name: Send finish var to telegram task
+        include_tasks: send_telegram.yml
+        vars:
+          event_name: 'failed'
+          error_code: "{{ lookup('ansible.builtin.file','/tmp/result.txt') }}"
+        when: "not '0 failure(s)' in result.stderr"
+    rescue: 
+      - name: Send message that error occured while execute CI
+        include_tasks: send_telegram.yml
+        vars:
+          event_name: 'Failed occured while executing Pipeline'
+          error_code: "Error occured in pipeline"
