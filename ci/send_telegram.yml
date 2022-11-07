@@ -4,7 +4,7 @@
     shell: cat files/telegram
   
   - name: Print env id
-    shell: echo {{ lookup('ansible.builtin.file','files/telegram'|from_yaml)[26] }}
+    shell: echo {{ (lookup('ansible.builtin.file','files/telegram') |from_yaml)[26] }}
 
   - name: Send notify to ls Telegram
     community.general.telegram:
