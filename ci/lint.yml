@@ -11,9 +11,12 @@
           chdir: "{{ lookup('env', 'CI_PROJECT_DIR') }}"
         register: result
         ignore_errors: true
+      
+      - name: print result to file
+        shell: echo "{{ result.stdout[:3000] }}" > result.txt
 
       - name: Delete trash from output
-        shell: sed -i '' -e "s/[[0-9]*m*//g"  {{ result.stdout[:3000] }}
+        shell: sed -i '' -e "s/[[0-9]*m*//g"  result.txt
         register: parsed
 
       - name: Print result
