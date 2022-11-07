@@ -1,7 +1,7 @@
 ---
  
   - name: Print file
-    shell: cat files/telegram
+    shell: cat files/telegram.j2
 
   - name: Send notify to ls Telegram
     community.general.telegram:
