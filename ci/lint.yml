@@ -15,8 +15,8 @@
       - name: print result to file
         shell: echo "{{result.stdout[:3000]}}" > /tmp/result.txt
 
-      # - name: cat result
-      #   shell: sed -e "s/[[0-9]*m//g" /tmp/result.txt 
+      - name: sed result
+        shell: sed -e "s/[[0-9]*m//g" /tmp/result.txt 
 
       - name: cat
         shell: cat /tmp/result.txt
@@ -32,7 +32,7 @@
         include_tasks: send_telegram.yml
         vars:
           event_name: 'failed'
-          error_code: "{{ (lookup('ansible.builtin.file','/tmp/result.txt')) | from_yaml}}"
+          error_code: "{{ lookup('ansible.builtin.file','/tmp/result.txt')}}"
         when: "not '0 failure(s)' in result.stderr"
     rescue: 
       - name: Send message that error occured while execute CI
