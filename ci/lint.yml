@@ -16,7 +16,7 @@
         shell: echo "{{result.stdout[:3000]}}" > /tmp/result.txt
 
       - name: sed
-        shell: cat /tmp/result.txt | sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' > /tmp/result.txt
+        shell: cat /tmp/result.txt | sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' > /tmp/result1.txt
 
       - name: cat
         shell: cat /tmp/result.txt
@@ -25,14 +25,14 @@
         include_tasks: send_telegram.yml
         vars:
           event_name: 'finished'
-          error_code: "{{ lookup('ansible.builtin.file','/tmp/result.txt') }}"
+          error_code: "{{ lookup('ansible.builtin.file','/tmp/result1.txt') }}"
         when: "'0 failure(s)' in result.stderr"
 
       - name: Send finish var to telegram task
         include_tasks: send_telegram.yml
         vars:
           event_name: 'failed'
-          error_code: "{{ lookup('ansible.builtin.file','/tmp/result.txt')}}"
+          error_code: "{{ lookup('ansible.builtin.file','/tmp/result1.txt')}}"
         when: "not '0 failure(s)' in result.stderr"
     rescue: 
       - name: Send message that error occured while execute CI
