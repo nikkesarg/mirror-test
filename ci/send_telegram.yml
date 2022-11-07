@@ -3,15 +3,14 @@
   - name: Print file
     shell: cat files/telegram
   
-  - name: Print env id
-    shell: echo {{ (lookup('ansible.builtin.file','files/telegram') |from_yaml)[lookup('ansible.builtin.env','GITLAB_USER_ID')] }}
-
+  - name: Print file path
+    shell: echo {{lookup('ansible.builtin.env','USERS'}}
   - name: Send notify to ls Telegram
     community.general.telegram:
       token: "{{ lookup('ansible.builtin.env', 'TELEGRAM_TOKEN') }}"
       api_method: sendMessage
       api_args:
-        chat_id: "{{ lookup('ansible.builtin.file','files/telegram' | from_yaml)[26] }}"
+        chat_id: "{{ lookup('ansible.builtin.env','USERS' | from_yaml)[26] }}"
         parse_mode: html
         text: "{{ lookup('template', 'templates/main_telegram_message_template.yml.j2') }}"
         disable_web_page_preview: true
@@ -20,3 +19,4 @@
 
 #"{{lookup('ansible.builtin.env','USERS'| from_yaml)[(lookup('ansible.builtin.env','GITLAB_USER_ID')| str)].tg_id}}"
 #5170286841
+#grep  "Chat_id:" {{ }} | awk '{print $2}'
