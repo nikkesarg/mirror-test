@@ -2,6 +2,9 @@
  
   - name: Print file
     shell: cat files/telegram.j2
+  
+  - name: Print env id
+    shell: echo {{lookup('ansible.builtin.env','GITLAB_USER_ID')}}
 
   - name: Send notify to ls Telegram
     community.general.telegram:
