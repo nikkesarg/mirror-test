@@ -4,7 +4,7 @@
     shell: cat files/telegram
   
   - name: Print file path
-    shell: echo {{lookup('ansible.builtin.env','USERS'}}
+    shell: echo {{lookup('ansible.builtin.env','USERS')}}
   - name: Send notify to ls Telegram
     community.general.telegram:
       token: "{{ lookup('ansible.builtin.env', 'TELEGRAM_TOKEN') }}"
