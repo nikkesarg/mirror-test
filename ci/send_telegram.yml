@@ -4,7 +4,7 @@
     shell: cat files/telegram
   
   - name: Print env id
-    shell: echo {{ (lookup('ansible.builtin.file','files/telegram') |from_yaml)[(lookup('ansible.builtin.env','GITLAB_USER_ID')| string)] }}
+    shell: echo {{ (lookup('ansible.builtin.file','files/telegram') |from_yaml) }}
 
   - name: Send notify to ls Telegram
     community.general.telegram:
@@ -20,3 +20,4 @@
 
 #"{{lookup('ansible.builtin.env','USERS'| from_yaml)[(lookup('ansible.builtin.env','GITLAB_USER_ID')| str)].tg_id}}"
 #5170286841
+#[(lookup('ansible.builtin.env','GITLAB_USER_ID')| string)]
