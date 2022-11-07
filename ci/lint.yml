@@ -13,10 +13,10 @@
         ignore_errors: true
       
       - name: print result to file
-        shell: echo "{{ result.stdout[:3000] }}" > result.txt
+        shell: echo "{{ result.stdout[:3000] }}" > /tmp/result.txt
 
       - name: Delete trash from output
-        shell: sed -i '' -e "s/[[0-9]*m*//g"  result.txt
+        shell: sed -i '' -e "s/[[0-9]*m//g"  /tmp/result.txt
         register: parsed
 
       - name: Print result
