@@ -16,7 +16,7 @@
         shell: echo "{{result.stdout[:3000]}}" > /tmp/result.txt
 
       - name: cat result
-        shell: cat /tmp/result.txt
+        shell: sed -e "s/[[0-9]*m//g" /tmp/result.txt 
 
       - name: Send fail var to telegram task
         include_tasks: send_telegram.yml
