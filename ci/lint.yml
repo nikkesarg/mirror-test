@@ -15,8 +15,8 @@
       - name: print result to file
         shell: echo "{{result.stdout[:3000]}}" > /tmp/result.txt
 
-      - name: sed result
-        shell: sed -e 's/\x1b\[[0-9;]*m//g' /tmp/result.txt 
+      - name: sed
+        shell: cat /tmp/result.txt | sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' > /tmp/result.txt
 
       - name: cat
         shell: cat /tmp/result.txt
