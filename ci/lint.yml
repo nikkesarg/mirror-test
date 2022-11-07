@@ -17,9 +17,6 @@
 
       - name: sed
         shell: cat /tmp/result.txt | sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' > /tmp/result1.txt
-
-      - name: cat
-        shell: cat /tmp/result.txt
   
       - name: Send fail var to telegram task
         include_tasks: send_telegram.yml
