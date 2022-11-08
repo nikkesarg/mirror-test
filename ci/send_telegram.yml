@@ -15,7 +15,3 @@
         disable_web_page_preview: true
         disable_notification: true
 
-
-#"{{lookup('ansible.builtin.env','USERS'| from_yaml)[(lookup('ansible.builtin.env','GITLAB_USER_ID')| str)].tg_id}}"
-#5170286841
-#grep  "Chat_id:" {{ }} | awk '{print $2}'

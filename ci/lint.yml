@@ -22,7 +22,6 @@
         include_tasks: send_telegram.yml
         vars:
           event_name: 'finished'
-          error_code: "{{ lookup('ansible.builtin.file','/tmp/result1.txt') }}"
         when: "'0 failure(s)' in result.stderr"
 
       - name: Send finish var to telegram task
@@ -37,3 +36,6 @@
         vars:
           event_name: 'Failed occured while executing Pipeline'
           error_code: "Error occured in pipeline"
+      - name: Fail job
+        ansible.builtin.fail:
+          msg: Something went wrong on pipeline
