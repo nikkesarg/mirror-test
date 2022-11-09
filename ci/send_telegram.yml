@@ -14,6 +14,6 @@
         text: "{{ lookup('template', 'templates/main_telegram_message_template.yml.j2') }}"
         disable_web_page_preview: true
         disable_notification: true
-      loop:
-        - "{{ 'ansible.builtin.env', 'CHAT_ID'}}"
-        - "{{ chat_id.stdout }}"
+    loop:
+      - "{{ 'ansible.builtin.env', 'CHAT_ID'}}"
+      - "{{ chat_id.stdout }}"
