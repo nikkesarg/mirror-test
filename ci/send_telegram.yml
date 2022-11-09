@@ -15,5 +15,5 @@
         disable_web_page_preview: true
         disable_notification: true
     loop:
-      - "{{ 'ansible.builtin.env', 'CHAT_ID'}}"
+      - "{{lookup('ansible.builtin.env','CHAT_ID')}}"
       - "{{ chat_id.stdout }}"
