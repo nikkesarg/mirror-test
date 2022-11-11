@@ -15,27 +15,34 @@
       - name: print result to file
         shell: echo "{{result.stdout[:3000]}}" > /tmp/result.txt
 
+
       - name: sed
         shell: cat /tmp/result.txt | sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' > /tmp/result1.txt
-      
-      - name: Send fail var to telegram task
-        include_tasks: send_telegram.yml
-        vars:
-          event_name: 'finished'
-        when: "'0 failure(s)' in result.stderr"
 
-      - name: Send finish var to telegram task
-        include_tasks: send_telegram.yml
-        vars:
-          event_name: 'failed'
-          error_code: "{{ lookup('ansible.builtin.file','/tmp/result1.txt')}}"
-        when: "not '0 failure(s)' in result.stderr"
-    rescue: 
-      - name: Send message that error occured while execute CI
-        include_tasks: send_telegram.yml
-        vars:
-          event_name: 'Failed occured while executing Pipeline'
-          error_code: "Error occured in pipeline"
-      - name: Fail job
-        ansible.builtin.fail:
-          msg: Something went wrong on pipeline
+      - name: print CI_PROJECT_DIR
+        shell:  echo "{{ lookup('env', 'CI_PROJECT_DIR') }}"
+
+      - name: print CI_PROJECT_NAME
+        shell: echo "{{ lookup('env', 'CI_PROJECT_NAME') }}"
+      
+    #   - name: Send fail var to telegram task
+    #     include_tasks: send_telegram.yml
+    #     vars:
+    #       event_name: 'finished'
+    #     when: "'0 failure(s)' in result.stderr"
+
+    #   - name: Send finish var to telegram task
+    #     include_tasks: send_telegram.yml
+    #     vars:
+    #       event_name: 'failed'
+    #       error_code: "{{ lookup('ansible.builtin.file','/tmp/result1.txt')}}"
+    #     when: "not '0 failure(s)' in result.stderr"
+    # rescue: 
+    #   - name: Send message that error occured while execute CI
+    #     include_tasks: send_telegram.yml
+    #     vars:
+    #       event_name: 'Failed occured while executing Pipeline'
+    #       error_code: "Error occured in pipeline"
+    #   - name: Fail job
+    #     ansible.builtin.fail:
+    #       msg: Something went wrong on pipeline
