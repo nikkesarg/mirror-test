@@ -1,0 +1,1 @@
+Hello from branch 1 and i hope it would copy with master or main branch
